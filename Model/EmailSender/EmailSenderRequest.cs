@@ -9,7 +9,7 @@ namespace EmailSenderApi.Model.EmailSender
         public string Subject { get; set; }
         public string Body { get; set; }
         public IReadOnlyList<Atachment>? Atachments { get; private set; }
-        public DateTime LastAttemptAt =>DateTime.UtcNow
+        public DateTime LastAttemptAt => DateTime.UtcNow;
 
     }
 }

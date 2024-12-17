@@ -23,21 +23,14 @@ namespace EmailSenderApi.Controllers
         [HttpPost("enviar")]
         public async Task<ActionResult<EmailSenderResponse>> SendEmail([FromBody] EmailSenderRequest email)
         {
-            if (!ModelState.IsValid)
+            var ret = await _emailService.SendEmail(email);
+            if (ret!.Status == EmailStatus.Sent)
             {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                var ret = await _emailService.SendEmail(email);
                 return Ok(new { Status = "Sucesso", Data = ret });
-
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogError(ex, "Falha no envio do email");
-                return StatusCode(500, new ErrorResponse("Error", "Falha de envio de email", ex.Message));
+                return BadRequest(new { Status = "Falha no envio", Data = ret });
             }
         }
     }
